@@ -1,7 +1,7 @@
 // ModalEditHabitacion.tsx
 import React, { useEffect } from 'react';
 import { Form, Input, Button, message } from 'antd';
-import axios from 'axios';
+import * as habitacionesApi from '../services/habitacionesApi';
 
 interface ModalEditHabitacionProps {
   habitacionid: number;
@@ -14,12 +14,9 @@ const ModalEditHabitacion: React.FC<ModalEditHabitacionProps> = ({ habitacionid,
   useEffect(() => {
     const obtenerDatosHabitacion = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/habitaciones/${habitacionid}`);
-        const habitacion = response.data;
-
-        // Establecer los valores iniciales del formulario
+        const habitacion = await habitacionesApi.fetchHabitacion(habitacionid);
         form.setFieldsValue({
-          nombreHabitacion: habitacion.nombre_habitacion,
+          nombreHabitacion: habitacion.nombreHabitacion,
           descripcion: habitacion.descripcion,
           capacidad: habitacion.capacidad,
         });
@@ -28,22 +25,16 @@ const ModalEditHabitacion: React.FC<ModalEditHabitacionProps> = ({ habitacionid,
       }
     };
 
-    // Llama a la función al cargar el componente
     obtenerDatosHabitacion();
   }, [habitacionid, form]);
 
   const onFinish = async (values: any) => {
     try {
-      const response = await axios.put(`http://localhost:3000/habitaciones/edit/${habitacionid}`, values);
+      await habitacionesApi.updateHabitacion(habitacionid, values);
 
-      if (response.status === 200) {
-        console.log('Habitación editada correctamente');
-        message.success('Habitación editada correctamente');
-        onEditSuccess();
-      } else {
-        console.error('Error al editar habitación');
-        message.error('Error al editar habitación');
-      }
+      console.log('Habitación editada correctamente');
+      message.success('Habitación editada correctamente');
+      onEditSuccess();
     } catch (error) {
       console.error('Error al editar habitación', error);
       message.error('Error al editar habitación');

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { Button, Modal, Space } from 'antd';
-import axios from 'axios';
+import * as habitacionesApi from '../services/habitacionesApi';
 
 const { confirm } = Modal;
 
@@ -13,7 +13,7 @@ interface ModalDeleteHabitacionProps {
 const ModalDeleteHabitacion: React.FC<ModalDeleteHabitacionProps> = ({ habitacionid, onDeleteSuccess }) => {
   const showDeleteConfirm = () => {
     confirm({
-      title: '¿Está seguro de eliminar esta habitación?',
+      title: '¿Está seguro de eliminar esta habitación lklkl?',
       icon: <ExclamationCircleFilled />,
       content: 'Esta acción no se puede deshacer.',
       okText: 'Sí',
@@ -28,16 +28,11 @@ const ModalDeleteHabitacion: React.FC<ModalDeleteHabitacionProps> = ({ habitacio
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`http://localhost:3000/habitaciones/delete/${habitacionid}`);
-      
-      if (response.status === 200) {
-        console.log('Habitación eliminada correctamente');
-        onDeleteSuccess(); // Llamar a la función de éxito después de la eliminación
-      } else {
-        console.error('Error al eliminar la habitación');
-      }
-    } catch (error) {
-      console.error('Error de red:', error);
+      await habitacionesApi.deleteHabitacion(habitacionid);
+      console.log('Habitación eliminada correctamente');
+      onDeleteSuccess(); // Llamar a la función de éxito después de la eliminación
+    } catch (error: any) {
+      console.error('Error al eliminar la habitación:', error.message);
     }
   };
 

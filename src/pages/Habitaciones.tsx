@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Table, Tag, Button, Modal } from 'antd';
+import { Space, Table, Button, Modal } from 'antd';
+import {
+PlusOutlined,
+} from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
-import ModalAddHabitacion from './ModalAddHabitaciones';
-import ModalDeleteHabitacion from './ModalDeleteHabitacion';
-import ModalEditHabitacion from './ModalEditHabitacion';
-import axios from 'axios';
+import ModalAddHabitacion from '../components/ModalAddHabitaciones';
+import ModalDeleteHabitacion from '../components/ModalDeleteHabitacion';
+import ModalEditHabitacion from '../components/ModalEditHabitacion';
+import * as habitacionesApi from '../services/habitacionesApi';
 
 interface DataType {
   key: string;
   habitacionid: number;
-  nombre_habitacion: string;
+  nombreHabitacion: string;
   descripcion: string;
   capacidad: number;
   disponible: boolean;
@@ -18,22 +21,29 @@ interface DataType {
 const HabitacionesTable: React.FC = () => {
   const [data, setData] = useState<DataType[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalAddVisible, setModalAddVisible] = useState(false);
   const [selectedHabitacionId, setSelectedHabitacionId] = useState<number | null>(null);
 
-  // Función para obtener datos de habitaciones desde el backend
   const obtenerDatosHabitaciones = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/habitaciones');
-      setData(response.data);
+      const habitaciones = await habitacionesApi.fetchHabitaciones();
+      const habitacionesFormateadas: DataType[] = habitaciones.map((habitacion) => ({
+        key: habitacion.habitacionid.toString(),
+        habitacionid: habitacion.habitacionid,
+        nombreHabitacion: habitacion.nombreHabitacion,
+        descripcion: habitacion.descripcion,
+        capacidad: habitacion.capacidad,
+        disponible: habitacion.disponible,
+      }));
+      setData(habitacionesFormateadas);
     } catch (error) {
       console.error('Error al obtener datos de habitaciones:', error);
     }
   };
 
   useEffect(() => {
-    // Llama a la función al cargar el componente
     obtenerDatosHabitaciones();
-  }, []); // El segundo parámetro [] significa que se ejecutará solo una vez al montar el componente
+  }, []);
 
   const actualizarDatos = async () => {
     await obtenerDatosHabitaciones();
@@ -46,7 +56,6 @@ const HabitacionesTable: React.FC = () => {
 
   const handleEditSuccess = () => {
     setModalVisible(false);
-    // Puedes realizar otras acciones después de editar aquí si es necesario
     actualizarDatos();
   };
 
@@ -93,7 +102,18 @@ const HabitacionesTable: React.FC = () => {
 
   return (
     <>
-      <ModalAddHabitacion />
+      <Button type="primary"  
+      icon= {<PlusOutlined/>} 
+      onClick={() => setModalAddVisible(true)}
+      >
+      Agregar Habitación
+      </Button>
+    
+      <ModalAddHabitacion 
+      visible={modalAddVisible}
+      onCancel={() => setModalAddVisible(false)}
+      onAddSuccess={actualizarDatos} 
+      />
       <Table columns={columns} dataSource={data} />
       {modalVisible && (
         <Modal

@@ -1,23 +1,23 @@
 import React from 'react';
 import './App.css';
-import {BrowserRouter, Route} from "react-router-dom";
-import MenuComponent from './components/MenuComponent';
-import HabitacionesTable from './components/habitaciones/HabitacionesTable';
+import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} from "react-router-dom";
+import HabitacionesTable from './pages/Habitaciones';
+import RootLayout from './layouts/RootLayout';
+import { Home } from './pages/Home';
 
-const App = () => {
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+  <Route path="/" element={<RootLayout />}>
+      <Route index element = {<Home/>}/>
+      <Route path='habitaciones' element={<HabitacionesTable/>} />
+
+  </Route>
+))
+
+function App() {
   return (
-    <BrowserRouter>
-      <div style={{ display: 'flex' }}>
-        {/* Renderiza el menú */}
-        <MenuComponent />
-
-        {/* Configura las rutas */}
-        <Route>
-          <Route path="/listhabitaciones" component={HabitacionesTable} />
-          {/* Agrega más rutas según sea necesario */}
-        </Route>
-      </div>
-    </BrowserRouter>
+   <RouterProvider router={router}></RouterProvider>
   );
 };
 
