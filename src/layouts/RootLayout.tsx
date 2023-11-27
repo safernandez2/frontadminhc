@@ -4,6 +4,8 @@ import {
     MenuUnfoldOutlined,
     UserOutlined,
     GlobalOutlined,
+    HomeOutlined,
+    ShopOutlined,
     AppstoreAddOutlined, BankOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
@@ -31,12 +33,12 @@ const { Header, Sider, Content } = Layout;
                     items={[
                         {
                             key: '1',
-                            icon: <BankOutlined />,
+                            icon: <HomeOutlined />,
                             label:(<NavLink to="/">Home</NavLink>),
                         },
                         {
                             key: '2',
-                            icon: <AppstoreAddOutlined />,
+                            icon: <ShopOutlined />,
                             label: (<NavLink to="/habitaciones">Habitaciones</NavLink>),                     
                         },
                     ]}

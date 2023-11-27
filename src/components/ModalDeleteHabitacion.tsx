@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { Button, Modal, Space } from 'antd';
 import * as habitacionesApi from '../services/habitacionesApi';
@@ -11,6 +11,8 @@ interface ModalDeleteHabitacionProps {
 }
 
 const ModalDeleteHabitacion: React.FC<ModalDeleteHabitacionProps> = ({ habitacionid, onDeleteSuccess }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   const showDeleteConfirm = () => {
     confirm({
       title: '¿Está seguro de eliminar esta habitación lklkl?',
@@ -36,9 +38,19 @@ const ModalDeleteHabitacion: React.FC<ModalDeleteHabitacionProps> = ({ habitacio
     }
   };
 
+  const buttonStyle = {
+    borderColor: isHovered ? 'red' : undefined,
+    color: isHovered ? 'red' : undefined,
+  };
+
   return (
     <Space wrap>
-      <Button onClick={showDeleteConfirm} type="dashed">
+      <Button onClick={showDeleteConfirm}
+       type="dashed"
+        style={buttonStyle}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        >
         Eliminar
       </Button>
     </Space>

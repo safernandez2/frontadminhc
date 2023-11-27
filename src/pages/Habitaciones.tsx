@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Table, Button, Modal } from 'antd';
-import {
-PlusOutlined,
-} from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import ModalAddHabitacion from '../components/ModalAddHabitaciones';
 import ModalDeleteHabitacion from '../components/ModalDeleteHabitacion';
@@ -16,6 +14,7 @@ interface DataType {
   descripcion: string;
   capacidad: number;
   disponible: boolean;
+  imagenUrl: string;
 }
 
 const HabitacionesTable: React.FC = () => {
@@ -34,7 +33,9 @@ const HabitacionesTable: React.FC = () => {
         descripcion: habitacion.descripcion,
         capacidad: habitacion.capacidad,
         disponible: habitacion.disponible,
+        imagenUrl: habitacion.imagenUrl,
       }));
+
       setData(habitacionesFormateadas);
     } catch (error) {
       console.error('Error al obtener datos de habitaciones:', error);
@@ -87,6 +88,12 @@ const HabitacionesTable: React.FC = () => {
       render: (isDisponible) => <span>{isDisponible ? 'Disponible' : 'No disponible'}</span>,
     },
     {
+      title: 'Imagen',
+      dataIndex: 'imagenUrl',
+      key: 'imagenUrl',
+      render: (imagenUrl) => <img src={imagenUrl} alt="Imagen de la habitación" style={{ maxWidth: '100px', maxHeight: '100px' }} />,
+    },
+    {
       title: 'Action',
       key: 'action',
       render: (_, record) => (
@@ -102,23 +109,24 @@ const HabitacionesTable: React.FC = () => {
 
   return (
     <>
-      <Button type="primary"  
-      icon= {<PlusOutlined/>} 
-      onClick={() => setModalAddVisible(true)}
+      <Button
+        type="primary"
+        icon={<PlusOutlined />}
+        onClick={() => setModalAddVisible(true)}
       >
-      Agregar Habitación
+        Agregar Habitación
       </Button>
-    
-      <ModalAddHabitacion 
-      visible={modalAddVisible}
-      onCancel={() => setModalAddVisible(false)}
-      onAddSuccess={actualizarDatos} 
+      
+      <ModalAddHabitacion
+        visible={modalAddVisible}
+        onCancel={() => setModalAddVisible(false)}
+        onAddSuccess={actualizarDatos}
       />
       <Table columns={columns} dataSource={data} />
       {modalVisible && (
         <Modal
           title="Editar Habitación"
-          visible={modalVisible}
+          open={modalVisible}
           onCancel={() => setModalVisible(false)}
           footer={null}
         >

@@ -1,6 +1,9 @@
-import React from 'react';
-import { Form, Input, Button, message, Modal } from 'antd';
+import React, {useState} from 'react';
+import { Form, Input, Button, message, Modal, Upload } from 'antd';
 import * as habitacionesApi from '../services/habitacionesApi';
+import { InboxOutlined } from '@ant-design/icons'
+
+const { Dragger } = Upload;
 
 interface ModalAddHabitacionProps {
   visible: boolean;
@@ -10,24 +13,47 @@ interface ModalAddHabitacionProps {
 
 const ModalAddHabitacion: React.FC<ModalAddHabitacionProps> = ({visible, onCancel, onAddSuccess }) => {
   const [form] = Form.useForm();
+  const [fileList, setFileList]= useState<any[]>([]);
 
   const onFinish = async (values: any) => {
+    console.log('Valores del formulario:', values);
+    console.log('Lista de archivos:', fileList);
+
+
     try {
-      await habitacionesApi.createHabitacion(values);
-      console.log('Habitación agregada correctamente');
+      const formData = new FormData();
+      formData.append('nombreHabitacion', values.nombreHabitacion);
+      formData.append('descripcion', values.descripcion);
+      formData.append('capacidad', values.capacidad.toString());
+      formData.append('disponible', values.disponible || false); 
+
+      if (values.imagenUrl && values.imagenUrl.file) {
+        console.log('values.imagenUrl:', values.imagenUrl);
+        console.log('values.imagenUrl.file:', values.imagenUrl.file);
+        formData.append('imagenUrl', values.imagenUrl.file);
+      }
+
+      console.log('FormData:', formData);
+
+      await habitacionesApi.createHabitacion(formData);
       message.success('Habitación agregada correctamente');
-      onAddSuccess(); // Puedes agregar más lógica aquí, como recargar la lista de habitaciones, etc.
+      form.resetFields();
+      onAddSuccess();
     } catch (error) {
       console.error('Error al agregar habitación:', error);
-      // Puedes manejar el error de acuerdo a tus necesidades
       message.error('Error al agregar habitación');
     }
   };
 
+  const onFileChange = (info: any) => {
+    setFileList(info.fileList);
+  };
+
+
   return (
     <Modal
       title="Agregar Habitación"
-      visible={visible}
+      open={visible}
       onCancel={onCancel}
       footer={null}
     >
@@ -43,6 +69,20 @@ const ModalAddHabitacion: React.FC<ModalAddHabitacionProps> = ({visible, onCance
       <Form.Item name="capacidad" label="Capacidad" rules={[{ required: true, message: 'Ingrese la capacidad de la habitación' }]}>
         <Input type="number" />
       </Form.Item>
+
+      <Form.Item name="imagenUrl" label="Imagen">
+          <Dragger
+            name="imagenUrl"
+            fileList={fileList}
+            onChange={onFileChange}
+            beforeUpload={() => false} // Prevent actual file upload for now
+          >
+            <p className="ant-upload-drag-icon">
+              <InboxOutlined />
+            </p>
+            <p className="ant-upload-text">Haz clic o arrastra el archivo para subir</p>
+          </Dragger>
+        </Form.Item>
 
       <Button type="primary" htmlType="submit">
         Agregar Habitación
