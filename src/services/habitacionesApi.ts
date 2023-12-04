@@ -26,9 +26,15 @@ export const fetchHabitacion = async (habitacionid: number): Promise<Habitacion>
   return response.data;
 };
 
-export const updateHabitacion = async (habitacionid: number, habitacion: Habitacion): Promise<Habitacion> => {
+export const updateHabitacion = async (habitacionid: number, habitacionData: Habitacion | FormData): Promise<Habitacion> => {
   const url = `${habitacionesApiUrl}/${habitacionid}`;
-  const response: AxiosResponse<Habitacion> = await axios.put(url, habitacion);
+
+  // Verificar si habitacionData es FormData y ajustar la configuración de axios
+  const config = habitacionData instanceof FormData
+    ? { headers: { 'Content-Type': 'multipart/form-data' } }
+    : {};
+
+  const response: AxiosResponse<Habitacion> = await axios.put(url, habitacionData, config);
   return response.data;
 };
   
