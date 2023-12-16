@@ -1,29 +1,39 @@
 import React from 'react';
 import { Carousel } from 'antd';
-
-const contentStyle: React.CSSProperties = {
-  height: '160px',
-  color: '#fff',
-  lineHeight: '160px',
-  textAlign: 'center',
-  background: '#364d79',
+import './Carousel.css';
+const AntCarousel: React.FC = () => {
+  return (
+    <Carousel autoplay className="custom-carousel">
+      <div>
+        <img
+          style={{ width: '100%', height: '160px', objectFit: 'cover' }}
+          src="https://www.xtrafondos.com/wallpapers/resized/casas-junto-a-lago-y-montanas-11238.jpg?s=large"
+          alt="Image One"
+        />
+      </div>
+      <div>
+        <img
+          style={{ width: '100%', height: '160px', objectFit: 'cover' }}
+          src="https://www.xtrafondos.com/wallpapers/resized/cabanas-en-el-bosque-durante-el-invierno-10778.jpg?s=large"
+          alt="Image Two"
+        />
+      </div>
+      <div>
+        <img
+          style={{ width: '100%', height: '160px', objectFit: 'cover' }}
+          src="https://www.xtrafondos.com/wallpapers/resized/muelle-en-la-playa-10702.jpg?s=large"
+          alt="Image Three"
+        />
+      </div>
+      <div>
+        <img
+          style={{ width: '100%', height: '160px', objectFit: 'cover' }}
+          src="https://www.xtrafondos.com/wallpapers/resized/templo-kinkakuji-pabellon-dorado-10612.jpg?s=large"
+          alt="Image Four"
+        />
+      </div>
+    </Carousel>
+  );
 };
-
-const AntCarousel: React.FC = () => (
-  <Carousel autoplay>
-    <div>
-      <h3 style={contentStyle}>one</h3>
-    </div>
-    <div>
-      <h3 style={contentStyle}>two</h3>
-    </div>
-    <div>
-      <h3 style={contentStyle}>three</h3>
-    </div>
-    <div>
-      <h3 style={contentStyle}>four</h3>
-    </div>
-  </Carousel>
-);
 
 export default AntCarousel;

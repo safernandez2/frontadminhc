@@ -41,6 +41,11 @@ const { Header, Sider, Content } = Layout;
                             icon: <ShopOutlined />,
                             label: (<NavLink to="/habitaciones">Habitaciones</NavLink>),                     
                         },
+                        {
+                            key: '3',
+                            icon: <ShopOutlined />,
+                            label: (<NavLink to="/reservas">Reservas</NavLink>),                     
+                        },
                     ]}
                 />
             </Sider>

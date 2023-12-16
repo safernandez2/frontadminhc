@@ -31,6 +31,8 @@ const ModalAddHabitacion: React.FC<ModalAddHabitacionProps> = ({visible, onCance
         console.log('values.imagenUrl:', values.imagenUrl);
         console.log('values.imagenUrl.file:', values.imagenUrl.file);
         formData.append('imagenUrl', values.imagenUrl.file);
+      }else {
+        throw new Error('La imagen es requerida. Por favor, suba una imagen.');
       }
 
       console.log('FormData:', formData);
@@ -38,10 +40,12 @@ const ModalAddHabitacion: React.FC<ModalAddHabitacionProps> = ({visible, onCance
       await habitacionesApi.createHabitacion(formData);
       message.success('Habitación agregada correctamente');
       form.resetFields();
+      setFileList([]); // Limpiar la lista de archivos después de guardar
+      onCancel(); // Cerrar el modal
       onAddSuccess();
-    } catch (error) {
-      console.error('Error al agregar habitación:', error);
-      message.error('Error al agregar habitación');
+    } catch (error:any) {
+      console.error('Error al agregar habitación:', error.message);
+      message.error(`Error al agregar habitación: ${error.message}`);
     }
   };
 
