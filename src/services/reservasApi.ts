@@ -9,6 +9,8 @@ export interface Reserva {
   correoCliente: string;
   fechaInicio: Date;
   fechaFin: Date;
+  estado: string;
+  numeroCliente: string;
 }
 
 export const fetchReservas = async (): Promise<Reserva[]> => {

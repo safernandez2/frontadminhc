@@ -12,6 +12,8 @@ interface DataType {
   correoCliente: string;
   fechaInicio: Date;
   fechaFin: Date;
+  estado: string;
+  numeroCliente: string;
 }
 
 const ReservasTable: React.FC = () => {
@@ -29,6 +31,8 @@ const ReservasTable: React.FC = () => {
         correoCliente: reserva.correoCliente,
         fechaInicio: reserva.fechaInicio,
         fechaFin: reserva.fechaFin,
+        estado: reserva.estado,
+        numeroCliente: reserva.numeroCliente,
       }));
 
       setData(reservasFormateadas);
@@ -52,7 +56,7 @@ const ReservasTable: React.FC = () => {
 
   const columns: ColumnsType<DataType> = [
     {
-        title: 'HabitacionID',
+        title: 'ReservaID',
         dataIndex: 'reservaid',
         key: 'reservaid',
     },
@@ -62,26 +66,35 @@ const ReservasTable: React.FC = () => {
       key: 'habitacionid',
     },
     {
-      title: 'Nombre_cliente',
+      title: 'Nombre del cliente',
       dataIndex: 'nombreCliente',
       key: 'nombreCliente',
     },
     {
-      title: 'Correo_Cliente',
+      title: 'Numero del cliente',
+      dataIndex: 'numeroCliente',
+      key: 'numeroCliente',
+    },
+    {
+      title: 'Correo del cliente',
       dataIndex: 'correoCliente',
       key: 'correoCliente',
     },
     {
-      title: 'Fecha_Inicio',
+      title: 'Fecha de Inicio',
       dataIndex: 'fechaInicio',
       key: 'fechaInicio',
     },
     {
-      title: 'Fecha_Fin',
+      title: 'Fecha de Fin',
       dataIndex: 'fechaFin',
       key: 'fechaFin',
     },
-   
+    {
+      title: 'Estado',
+      dataIndex: 'estado',
+      key: 'estado',
+    },
   ];
 
   return (

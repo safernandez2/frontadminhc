@@ -85,7 +85,7 @@ const HabitacionesTable: React.FC = () => {
       title: 'Disponible',
       dataIndex: 'disponible',
       key: 'disponible',
-      render: (isDisponible) => <span>{isDisponible ? 'Disponible' : 'No disponible'}</span>,
+      render: (isDisponible) => <span>{isDisponible ? 'No Disponible' : 'Disponible'}</span>,
     },
     {
       title: 'Imagen',
